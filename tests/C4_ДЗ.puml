@@ -1,0 +1,42 @@
+@startuml
+'подключение библиотек
+'!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4.puml
+'!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+'Заголовок
+title Домашнее задание по C4
+
+'Внешний сервис B2B обращается 
+'к http-серверу 1С ЕРП для 
+'создания заказов поставщика.
+
+'Блок параметров ->
+
+'Системы
+System_Boundary(ERP, "1C:ERP") {
+  Container(ERP_Номенклатура, "Номенклатура", "") 
+  Container(ERP_HTTPСервер, "HTTP-сервер", "")
+  Container(ERP_ЗаказПоставщика, "Заказ поставщика", "")  
+}
+System_Boundary(WMS, "1C:WMS") {
+  Container(WMS_Номенклатура, "Номенклатура", "")  
+} 
+
+System_Ext(esb, "Шина данных")
+System_Ext(B2B, "Внешний сервис B2B")
+
+'Блок параметров <-
+
+'Связи
+
+'Связи ЕРП с WMS через шину данных
+Rel(ERP_Номенклатура, esb, "Номенклатура", "https")
+Rel(esb, WMS_Номенклатура, "Номенклатура", "https")
+Rel(B2B, ERP_HTTPСервер, "", "https")
+Rel(ERP_HTTPСервер, ERP_ЗаказПоставщика, "", "https")
+
+@enduml
+
+'рекомендуется нумерация всех потоков, чтобы удобнее показывать
+' Gemini - можно картинку отдать в ИИ и он напишет код по картинке.
